@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metamorph xmlns="http://www.culturegraph.org/metamorph" version="1">
+    <rules>
+        <entity name="leader">
+            <data name="status" source="leader.status"/>
+            <data name="type" source="leader.type"/>
+            <data name="bibliographicLevel" source="leader.bibliographicLevel"/>
+            <data name="typeOfControl" source="leader.typeOfControl"/>
+            <data name="characterCodingScheme" source="leader.characterCodingScheme"/>
+            <data name="encodingLevel" source="leader.encodingLevel"/>
+            <data name="catalogingForm" source="leader.catalogingForm"/>
+            <data name="multipartLevel" source="leader.multipartLevel"/>
+        </entity>
+        <data source="003"/>
+    </rules>
+</metamorph>

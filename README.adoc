@@ -1,0 +1,118 @@
+= solr-morph-transformer
+:toc:
+
+A add-on for the Data Import Handler.
+
+This project adds a transformer that filters bibliographic records.
+
+== Installation
+
+----
+mvn package
+----
+
+Produces _solr-metamorph-transformer-VERSION-fat.jar_ in _target_ .
+
+=== Solr Integration
+
+_Assuming a fresh Solr installation._
+
+Place the jar in the _dist_ directory of your Solr installation.
+
+Enable the Data Import Handler and the transformer by adding the following
+_lib_ statements to the `solrconfig.xml`:
+
+----
+<lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-dataimporthandler-.*\.jar" />
+
+<lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-metamorph-transformer-.*\.jar" />
+----
+
+Add the _/dataimport_ request handle to the `solrconfig.xml`:
+
+----
+  <requestHandler name="/dataimport" class="solr.DataImportHandler">
+    <lst name="defaults">
+      <str name="config">solr-data-config.xml</str>
+    </lst>
+  </requestHandler>
+----
+
+== Symmetric Metamorph Transformer
+
+You can use this transformer to extract a selection of sub-fields from a bibliographic record with the metamorph DSL.
+
+The transformation works with fields and multi-value fields of type string.
+If the transformation fails, the original record will be used.
+
+The Symmetric Metamorph Transformer hat the following attributes:
+
+morphDef::
+_Required_. The metamorph definition file that is used for field extraction.
+The file should be located inside the config set's _conf_ directory.
+
+format::
+_Required_. The format of the processed record.
+
+Supported Formats:::
+* marc21
+
+For example:
+
+[source,xml]
+----
+<entity name="e" transformer="org.culturegraph.solr.dataimport.handler.SymmetricMetamorphTransformer">
+  <field column="record" morphDef="excerpt.xml" format="marc21" />
+  ...
+</entity>
+----
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File: excerpt.xml -->
+<metamorph xmlns="http://www.culturegraph.org/metamorph" version="1">
+    <rules>
+        <!-- Leader (Required) -->
+        <entity name="leader">
+            <data name="status" source="leader.status"/>
+            <data name="type" source="leader.type"/>
+            <data name="bibliographicLevel" source="leader.bibliographicLevel"/>
+            <data name="typeOfControl" source="leader.typeOfControl"/>
+            <data name="characterCodingScheme" source="leader.characterCodingScheme"/>
+            <data name="encodingLevel" source="leader.encodingLevel"/>
+            <data name="catalogingForm" source="leader.catalogingForm"/>
+            <data name="multipartLevel" source="leader.multipartLevel"/>
+        </entity>
+
+        <!-- 001 - Control Number (NR) -->
+        <data source="001"/>
+
+        <!-- 41 - Language Code -->
+        <entity name="041??" reset="true" sameEntity="false">
+            <entity-name>
+                <data source="041??">
+                    <switch-name-value/>
+                </data>
+            </entity-name>
+            <group>
+                <data source="041??.?">
+                    <switch-name-value/>
+                    <substring start="6" end="7"/>
+                    <switch-name-value/>
+                </data>
+            </group>
+        </entity>
+
+        <!-- 044 - Country of Publishing/Producing Entity Code (NR) -->
+        <entity name="044  ">
+            <data name="a" source="044  .a"/>
+        </entity>
+    </rules>
+</metamorph>
+----
+
+== References
+
+* link:https://lucene.apache.org/solr/guide/7_4/field-types-included-with-solr.html[Solr Ref Guide: Field Types Included with Solr]
+* link:https://lucene.apache.org/solr/guide/7_4/uploading-structured-data-store-data-with-the-data-import-handler.html[Solr Ref Guide: Data Import Handler]
