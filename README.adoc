@@ -1,4 +1,4 @@
-= solr-morph-transformer
+= solr-metamorph-transformer
 :toc:
 
 A add-on for the Data Import Handler.
