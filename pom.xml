@@ -31,7 +31,7 @@
     <dependencies>
         <!-- Replace when issue is fixed in metafacture-biblio 5.0.0 -->
         <dependency>
-            <groupId>com.github.eberhardtj</groupId>
+            <groupId>com.github.culturegraph</groupId>
             <artifactId>metafacture-biblio-quickfix</artifactId>
             <version>v0.1.2</version>
         </dependency>
