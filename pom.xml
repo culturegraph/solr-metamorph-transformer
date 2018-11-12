@@ -29,6 +29,7 @@
     </properties>
 
     <dependencies>
+        <!-- Metafacture -->
         <!-- Replace when issue is fixed in metafacture-biblio 5.0.0 -->
         <dependency>
             <groupId>com.github.culturegraph</groupId>
@@ -54,6 +55,7 @@
             <version>5.0.0</version>
         </dependency>
 
+        <!-- Solr Data Import Handler -->
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-dataimporthandler</artifactId>
@@ -61,6 +63,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -68,6 +71,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
